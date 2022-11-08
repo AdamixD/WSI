@@ -2,17 +2,18 @@ import numpy as np
 
 
 class GeneticAlgorithmAnalyzer:
-    def __init__(self, solver, problem, pop0, n_samples):
+    def __init__(self, solver, population_creator, problem, n_samples):
         self._solver = solver
         self._problem = problem
-        self._pop0 = pop0
+        self._population_creator = population_creator
         self._n_samples = n_samples
         self._X_best = []
         self._O_best = []
 
     def analyze(self):
         for i in range(self._n_samples):
-            x_best, o_best = self._solver.solve(self._problem, self._pop0)
+            pop0 = self._population_creator.create_population()
+            x_best, o_best = self._solver.solve(self._problem, pop0)
             self._X_best.append(x_best)
             self._O_best.append(o_best)
 
