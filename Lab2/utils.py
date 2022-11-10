@@ -24,8 +24,9 @@ class GeneticAlgorithmAnalyzer:
         o_best_total_index = np.argmax(self._O_best)
         average_score = np.average(self._O_best)
         median_score = np.median(self._O_best)
+        std_score = np.std(self._O_best)
 
         print(' ')
         print(f'Best sample = {o_best_total_index + 1}')
         print(f'Best score = {o_best_total}, Minimum score = {o_min_total}')
-        print(f'Average score = {average_score}, Median score = {median_score}')
+        print(f'Average score = {average_score}, Median score = {median_score}, Standard deviation = {std_score}')
