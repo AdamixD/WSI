@@ -1,36 +1,31 @@
+from Lab3.minimax_alpha_beta import minimax_alpha_beta
 from two_player_games.games.Pick import Pick
-from two_player_games.player import Player
-from two_player_games.minimax_alpha_beta import minimax_alpha_beta
 
 
-def my_game(simulation=False):
-    game = Pick(Player("A"), Player("B"))
-    print(game)
+def game_simulation(n=4, first_player_depth=1, second_player_depth=1):
+    game = Pick(n=n)
+    turn = 1
 
     while game.is_finished() is False:
-        if game.state.get_current_player() == game.first_player:
-            value, move = minimax_alpha_beta(game, 3, float('-inf'), float('inf'), True)
-            game.make_move(move)
-        else:
-            if simulation:
-                value, move = minimax_alpha_beta(game, 3, float('-inf'), float('inf'), False)
-                game.make_move(move)
-            else:
-                moves = game.get_moves()
-                print("\nYour options\n")
+        print(f"Turn {turn} ------------------------------------------------------------------------------------------")
 
-                for i, move in enumerate(moves, start=0):
-                    print(f"{i}: {move}")
+        heuristic_score, move = minimax_alpha_beta(game, first_player_depth, float('-inf'), float('inf'), True)
+        game.make_move(move)
 
-                option = int(input("\nEnter an option: "))
-                move = moves[option]
-                game.make_move(move)
+        print(f"Player {game.state._other_player.char}: selected move = {move.number}, heuristic_score = {heuristic_score}, player moves = {game.state.other_player_numbers}")
 
-        print("\n")
-        print(game)
+        heuristic_score, move = minimax_alpha_beta(game, second_player_depth, float('-inf'), float('inf'), False)
+        game.make_move(move)
 
-    print(f'{(game.get_winner())}')
+        print(f"Player {game.state._other_player.char}: selected move = {move.number}, heuristic_score = {heuristic_score}, moves = {game.state.other_player_numbers}")
+
+        turn += 1
+
+    if game.state.get_winner():
+        print(f"Winner = Player {game.state.get_winner().char}")
+    else:
+        print(f"Draw")
 
 
 if __name__ == "__main__":
-    my_game()
+    game_simulation(n=4, first_player_depth=1, second_player_depth=3)

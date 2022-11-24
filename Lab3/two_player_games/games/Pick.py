@@ -27,6 +27,30 @@ class Pick(Game):
 
         super().__init__(state)
 
+        self.game_combinations = self.get_game_combinations()
+
+    def get_game_combinations(self):
+        potential_numbers = range(1, self.state.max_number + 1)
+
+        def backtrack(i, aim_value):
+            combinations = []
+            for index in range(i, len(potential_numbers)):
+                number = potential_numbers[index]
+                if index > i and number == potential_numbers[index - 1]:
+                    continue
+                if number < aim_value:
+                    combinations.extend([number] + comb for comb in backtrack(index + 1, aim_value - number))
+                else:
+                    if number == aim_value:
+                        combinations.append([number])
+                    break
+            return combinations
+
+        game_combinations = backtrack(0, self.state.aim_value)
+        game_combinations = [combination for combination in game_combinations if len(combination) == self.state.n]
+
+        return game_combinations
+
 
 class PickMove(Move):
     """
@@ -77,13 +101,11 @@ class PickState(State):
         if move.number > self.max_number or move.number in self.selected_numbers:
             raise ValueError("Invalid move")
         else:
-            self.current_player_numbers.append(move.number)
-
             next_player = self._other_player
             next_player_numbers = self.other_player_numbers
 
             other_player = self._current_player
-            other_player_numbers = self.current_player_numbers
+            other_player_numbers = self.current_player_numbers + [move.number]
 
         return PickState(
             next_player, other_player, self.n, next_player_numbers, other_player_numbers
