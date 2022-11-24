@@ -9,15 +9,18 @@ def game_simulation(n=4, first_player_depth=1, second_player_depth=1):
     while game.is_finished() is False:
         print(f"Turn {turn} ------------------------------------------------------------------------------------------")
 
-        heuristic_score, move = minimax_alpha_beta(game, first_player_depth, float('-inf'), float('inf'), True)
+        [heuristic_score, move] = minimax_alpha_beta(game, first_player_depth, float('-inf'), float('inf'), True)
         game.make_move(move)
 
         print(f"Player {game.state._other_player.char}: selected move = {move.number}, heuristic_score = {heuristic_score}, player moves = {game.state.other_player_numbers}")
 
-        heuristic_score, move = minimax_alpha_beta(game, second_player_depth, float('-inf'), float('inf'), False)
+        if game.is_finished():
+            break
+
+        [heuristic_score, move] = minimax_alpha_beta(game, second_player_depth, float('-inf'), float('inf'), True)
         game.make_move(move)
 
-        print(f"Player {game.state._other_player.char}: selected move = {move.number}, heuristic_score = {heuristic_score}, moves = {game.state.other_player_numbers}")
+        print(f"Player {game.state._other_player.char}: selected move = {move.number}, heuristic_score = {heuristic_score}, player moves = {game.state.other_player_numbers}")
 
         turn += 1
 
@@ -28,4 +31,5 @@ def game_simulation(n=4, first_player_depth=1, second_player_depth=1):
 
 
 if __name__ == "__main__":
-    game_simulation(n=4, first_player_depth=1, second_player_depth=3)
+    game_simulation(n=4, first_player_depth=2, second_player_depth=2)
+

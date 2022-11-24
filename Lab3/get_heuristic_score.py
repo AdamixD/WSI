@@ -1,4 +1,4 @@
-def get_heuristic_score(game, maximizing_player):
+def get_heuristic_score(game, max_player):
     if not game.is_finished():
         heuristic_score = 0
         potential_combinations = []
@@ -22,9 +22,9 @@ def get_heuristic_score(game, maximizing_player):
 
             heuristic_score += combination_score
 
-        return -heuristic_score if maximizing_player else heuristic_score
+        return -heuristic_score if max_player else heuristic_score
     else:
         if game.get_winner():
-            return -100000 if maximizing_player else 100000
+            return -100000 if max_player else 100000
         else:
             return 0
