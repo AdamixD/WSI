@@ -17,20 +17,22 @@ data["ap_lo"] = data["ap_lo"].apply(lambda x: "low" if x < 75 else "normal" if x
 
 data.dropna(inplace=True)
 
-y = data[target_label]
+y = data.loc[:, data.columns.isin([target_label])]
 X = data.drop([target_label], axis=1)
 
-X_train, X_val_test, y_train, y_val_test = train_test_split(X, y, train_size=0.75, random_state=42)
+X_train, X_val_test, y_train, y_val_test = train_test_split(X, y, train_size=0.7, random_state=42)
 X_val, X_test, y_val, y_test = train_test_split(X_val_test, y_val_test, test_size=0.5, random_state=42)
 
-determine_the_best_model(target_label=target_label,
-                         X_train=X_train,
-                         y_train=y_train,
-                         X_val=X_val,
-                         y_val=y_val,
-                         X_test=X_test,
-                         y_test=y_test,
-                         depth_range=10,
-                         main_metric='f1_score',
-                         print_model=False
-                         )
+determine_the_best_model(
+    X_train=X_train,
+    y_train=y_train,
+    X_val=X_val,
+    y_val=y_val,
+    X_test=X_test,
+    y_test=y_test,
+    depth_range=6,
+    main_metric='f1_score',
+    print_model=False,
+    plot_results=True,
+    plot_conf_matrix=True
+)

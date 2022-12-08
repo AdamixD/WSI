@@ -2,7 +2,7 @@ import numpy as np
 
 
 class ID3Solver():
-    def __init__(self, depth=float('inf')):
+    def __init__(self, depth=1):
         self.target_label = None
         self.tree = None
         self.depth = depth
@@ -12,8 +12,8 @@ class ID3Solver():
             "depth": self.depth
         }
 
-    def fit(self, X, y, target_label):
-        self.target_label = target_label
+    def fit(self, X, y):
+        self.target_label = y.columns.values[0]
         X[self.target_label] = y
         X.dropna(inplace=True)
         self.tree = self.create_tree(X, self.depth)
